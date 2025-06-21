@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.SE114_DoAn" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+
+    <style name="Theme.SE114_DoAn" parent="Base.Theme.SE114_DoAn" />
+</resources>

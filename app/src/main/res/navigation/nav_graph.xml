@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_board">
+
+    <fragment
+        android:id="@+id/nav_board"
+        android:name="com.example.SE114_DoAn.BoardFragment"
+        android:label="Board"
+        tools:layout="@layout/fragment_board"/>
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.example.SE114_DoAn.NotificationsFragment"
+        android:label="Thông báo"
+        tools:layout="@layout/fragment_notifications"/>
+
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.SE114_DoAn.ChatFragment"
+        android:label="Trò chuyện"
+        tools:layout="@layout/fragment_chat">
+
+        <action
+            android:id="@+id/action_chatFragment_to_groupChatFragment"
+            app:destination="@id/groupChatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.SE114_DoAn.AccountFragment"
+        android:label="Tài khoản"
+        tools:layout="@layout/fragment_account"/>
+
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.example.SE114_DoAn.GroupChatFragment"
+        android:label="{GROUP_NAME}"
+        tools:layout="@layout/fragment_group_chat">
+
+        <argument
+            android:name="GROUP_ID"
+            app:argType="string" />
+        <argument
+            android:name="GROUP_NAME"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
