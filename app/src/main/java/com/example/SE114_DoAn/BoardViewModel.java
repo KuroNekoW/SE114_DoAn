@@ -39,6 +39,7 @@ public class BoardViewModel extends ViewModel {
     private final FirebaseStorage storage;
     private final FirebaseUser currentUser;
     private final Map<String, GroupChatInfo> groupChatInfoMap = new ConcurrentHashMap<>();
+    private final Map<String, List<Task>> groupTasksMap = new ConcurrentHashMap<>();
 
     public BoardViewModel() {
         db = FirebaseFirestore.getInstance();
@@ -92,6 +93,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     private void fetchGroupsAndRelatedData(List<String> groupIds) {
+        groupTasksMap.clear();
         db.collection("Group").whereIn(FieldPath.documentId(), groupIds)
                 .addSnapshotListener((groupSnapshots, error) -> {
                     if (error != null) { return; }
@@ -133,14 +135,14 @@ public class BoardViewModel extends ViewModel {
         db.collection("Task").whereEqualTo("group_id", groupId)
                 .orderBy("created_at", Query.Direction.ASCENDING)
                 .addSnapshotListener((taskSnapshots, error) -> {
-                    Map<String, List<Task>> currentTasks = groupTasks.getValue() != null ? groupTasks.getValue() : new HashMap<>();
                     if (error != null) {
                         Log.e(TAG, "Error listening for tasks", error);
                         return;
                     }
                     if (taskSnapshots != null) {
-                        currentTasks.put(groupId, taskSnapshots.toObjects(Task.class));
-                        groupTasks.postValue(new HashMap<>(currentTasks));
+                        List<Task> tasks = taskSnapshots.toObjects(Task.class);
+                        groupTasksMap.put(groupId, tasks);
+                        groupTasks.postValue(new HashMap<>(groupTasksMap));
                     }
                 });
     }
@@ -283,8 +285,6 @@ public class BoardViewModel extends ViewModel {
         Map<String, Object> userData = new HashMap<>();
         userData.put("username", newUsername.trim());
 
-
-        // Sử dụng .set(..., SetOptions.merge()) thay vì .update()
         db.collection("User").document(uid)
                 .set(userData, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> operationStatus.setValue("Cập nhật tên thành công!"))

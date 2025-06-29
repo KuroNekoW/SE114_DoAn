@@ -6,10 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -356,8 +362,42 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     private void showAddUserByEmailDialog() {
-        final EditText input = new EditText(this);
+        final AutoCompleteTextView input = new AutoCompleteTextView(this);
         input.setHint("Nhập email người cần thêm");
+
+        // Adapter để giữ và hiển thị danh sách gợi ý email
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
+        input.setAdapter(adapter);
+
+        // Handler để tạo độ trễ (debounce), tránh gọi query liên tục
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long DEBOUNCE_DELAY = 500; // 0.5 giây
+
+        // Thêm listener để theo dõi sự thay đổi văn bản
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Hủy các query cũ chưa được thực thi
+                handler.removeCallbacksAndMessages(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String queryText = s.toString().trim();
+                if (queryText.isEmpty()) {
+                    return; // Không làm gì nếu ô nhập trống
+                }
+
+                // Đặt một tác vụ mới với độ trễ
+                handler.postDelayed(() -> {
+                    fetchEmailSuggestions(queryText, adapter);
+                }, DEBOUNCE_DELAY);
+            }
+        });
+
         new AlertDialog.Builder(this)
                 .setTitle("Thêm Thành viên vào Group")
                 .setMessage("Lưu ý: Thêm thành viên vào group sẽ cho phép họ thấy tất cả các task trong group này.")
@@ -371,6 +411,37 @@ public class TaskDetailActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
+    }
+
+    /**
+     * Truy vấn Firestore để lấy gợi ý email và cập nhật Adapter.
+     * @param queryText Chuỗi email người dùng đang gõ.
+     * @param adapter Adapter của AutoCompleteTextView để cập nhật danh sách.
+     */
+    private void fetchEmailSuggestions(String queryText, ArrayAdapter<String> adapter) {
+        db.collection("User")
+                .whereGreaterThanOrEqualTo("email", queryText)
+                .whereLessThanOrEqualTo("email", queryText + "\uf8ff")
+                .limit(10) // Giới hạn số lượng gợi ý để tiết kiệm dữ liệu
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    ArrayList<String> suggestions = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String email = document.getString("email");
+                        if (email != null) {
+                            suggestions.add(email);
+                        }
+                    }
+
+                    runOnUiThread(() -> {
+                        adapter.clear();
+                        adapter.addAll(suggestions);
+                        adapter.notifyDataSetChanged();
+                    });
+                })
+                .addOnFailureListener(e -> {
+
+                });
     }
 
     private void showAddAttachmentDialog() {
@@ -391,7 +462,34 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     private void showAddLinkDialog() {
-        // Code đầy đủ để hiển thị dialog thêm link
+        final EditText input = new EditText(this);
+        input.setHint("Nhập đường dẫn URL");
+
+        final EditText nameInput = new EditText(this);
+        nameInput.setHint("Nhập tên cho tài liệu (tùy chọn)");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(40,20,40,20);
+        layout.addView(nameInput);
+        layout.addView(input);
+
+
+        new AlertDialog.Builder(this)
+                .setTitle("Thêm tài liệu bằng Link")
+                .setView(layout)
+                .setPositiveButton("Thêm", (dialog, which) -> {
+                    String url = input.getText().toString().trim();
+                    String name = nameInput.getText().toString().trim();
+                    if (name.isEmpty()) {
+                        name = url; // Mặc định tên là URL nếu không nhập
+                    }
+                    if (!url.isEmpty()) {
+                        viewModel.addLinkAttachment(task.getTask_id(), name, url);
+                    }
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private String getFileName(Uri uri) {
