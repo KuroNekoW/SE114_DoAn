@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import android.net.Uri;
+
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -276,9 +278,15 @@ public class BoardViewModel extends ViewModel {
         }
 
         String uid = currentUser.getUid();
-        // Dùng .update() để chỉ cập nhật một trường duy nhất
+        String email = currentUser.getEmail();
+        // Tạo một Map để chứa dữ liệu cần cập nhật
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("username", newUsername.trim());
+
+
+        // Sử dụng .set(..., SetOptions.merge()) thay vì .update()
         db.collection("User").document(uid)
-                .update("username", newUsername.trim())
+                .set(userData, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> operationStatus.setValue("Cập nhật tên thành công!"))
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Lỗi khi cập nhật username", e);

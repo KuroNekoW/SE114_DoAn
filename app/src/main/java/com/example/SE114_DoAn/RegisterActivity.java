@@ -71,7 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             Log.d("REGISTER", "Tạo tài khoản Auth thành công");
                             if (firebaseUser != null) {
-                                // ---- PHẦN THÊM MỚI  ----
                                 // Tạo một đối tượng User mới và lưu vào Firestore
                                 String uid = firebaseUser.getUid();
                                 // Lấy phần tên từ email làm username mặc định
@@ -88,7 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
                                             Log.e("REGISTER", "Lỗi khi lưu User vào Firestore", e);
                                             Toast.makeText(RegisterActivity.this, "Lỗi khi tạo hồ sơ người dùng.", Toast.LENGTH_SHORT).show();
                                         });
-                                // ---- KẾT THÚC PHẦN THÊM MỚI ----
                             }
 
                         } else {
@@ -97,9 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
                     });
+            /*
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+            */
         });
 
         backToLoginText.setOnClickListener(v -> {
