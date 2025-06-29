@@ -54,9 +54,10 @@ dependencies {
     implementation(libs.google.firebase.appcheck.playintegrity)
     implementation(libs.firebase.storage)
     implementation(libs.google.firebase.storage)
+    implementation(libs.google.firebase.messaging)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation ("com.squareup.picasso:picasso:2.8")
+    implementation (libs.picasso)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

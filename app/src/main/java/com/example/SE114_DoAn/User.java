@@ -6,6 +6,7 @@ import java.util.Date;
 public class User {
     private String username;
     private String email;
+    private String fcmToken;
 
     @ServerTimestamp
     private Date created_at;
@@ -43,4 +44,6 @@ public class User {
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
+    public String getFcmToken() { return fcmToken; }
+    public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 }
