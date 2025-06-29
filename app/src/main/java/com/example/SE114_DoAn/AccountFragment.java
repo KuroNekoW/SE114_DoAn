@@ -3,7 +3,9 @@ package com.example.SE114_DoAn;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,26 +14,41 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 public class AccountFragment extends Fragment {
 
     private TextView tvAccountName, tvAccountEmail;
+    private ImageView imageProfile;
+    private Button imageProfileBtn;
 
     private SharedPreferences sharedPreferences;
+    private StorageReference storageReference;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -51,10 +68,20 @@ public class AccountFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
         sharedPreferences = requireActivity().getSharedPreferences(PREFS_NAME, requireActivity().MODE_PRIVATE);
+        storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference profileRef= storageReference.child("usersProfilePic/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imageProfile);
+            }
+        });
 
         tvAccountName = view.findViewById(R.id.tvAccountName);
         tvAccountEmail = view.findViewById(R.id.tvAccountEmail);
         ImageButton btnAccountMenu = view.findViewById(R.id.btnAccountMenu);
+        imageProfile = view.findViewById(R.id.imageProfile);
+        imageProfileBtn = view.findViewById(R.id.imageProfileBtn);
 
         loadAndListenUserProfile();
 
@@ -81,9 +108,45 @@ public class AccountFragment extends Fragment {
 
             popupMenu.show();
         });
+        //Nút đổi ảnh
+        imageProfileBtn.setOnClickListener(v -> {
+            Intent openGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityIntent.launch(openGallery);
+        });
 
 
         return view;
+    }
+    //Đổi ảnh
+    private final ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Intent image=result.getData();
+                    Uri imageUri = image.getData();
+                    uploadImagetoFirebase(imageUri);
+                }
+            });
+
+    private void uploadImagetoFirebase(Uri imageUri) {
+        StorageReference imageRef = storageReference.child("usersProfilePic/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+        imageRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(imageProfile);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Image không được upload", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadAndListenUserProfile() {

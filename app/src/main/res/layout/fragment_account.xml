@@ -19,6 +19,7 @@
 
         <!-- Avatar (giả lập bằng hình tròn) -->
         <ImageView
+            android:id="@+id/imageProfile"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/circle_background"
@@ -112,6 +113,21 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="14dp"
         android:text="Themes"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/imageProfileBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="#00BCD4"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="left"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="14dp"
+        android:text="Change Profile Picture"
         android:textSize="14sp" />
 
 </LinearLayout>

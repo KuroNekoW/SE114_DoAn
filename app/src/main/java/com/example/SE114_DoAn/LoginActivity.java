@@ -3,6 +3,7 @@ package com.example.SE114_DoAn;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         // Khởi tạo Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+
         // Khởi tạo SharedPreferences
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -69,22 +71,30 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(KEY_LOGGED_IN, true);
-                                editor.apply();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                    .addOnCompleteListener(this, task -> {
+                        if (!task.isSuccessful()){
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                        else if (mAuth.getCurrentUser()!= null && !mAuth.getCurrentUser().isEmailVerified()){
+                            mAuth.getCurrentUser().sendEmailVerification()
+                                    .addOnSuccessListener(unused -> Toast.makeText(LoginActivity.this, "Verification Email đã được gửi", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Log.d("REGISTER", "Verification Email không được gửi", e));
+                            Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(KEY_LOGGED_IN, true);
+                            editor.apply();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
                     });
+
         });
 
         // Xử lý quên mật khẩu

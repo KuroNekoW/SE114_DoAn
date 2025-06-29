@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore; // Import Firestore
@@ -55,12 +60,16 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            Log.d("REGISTER", "Tạo tài khoản Auth thành công");
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            Log.d("REGISTER", "Tạo tài khoản Auth thành công");
                             if (firebaseUser != null) {
                                 // ---- PHẦN THÊM MỚI  ----
                                 // Tạo một đối tượng User mới và lưu vào Firestore
@@ -81,11 +90,16 @@ public class RegisterActivity extends AppCompatActivity {
                                         });
                                 // ---- KẾT THÚC PHẦN THÊM MỚI ----
                             }
+
                         } else {
                             Log.e("REGISTER", "Tạo tài khoản thất bại", task.getException());
                             Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+
                     });
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         backToLoginText.setOnClickListener(v -> {

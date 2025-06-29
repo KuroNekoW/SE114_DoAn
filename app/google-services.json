@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "547780850155",
-    "firebase_url": "https://se114-doan-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "se114-doan",
-    "storage_bucket": "se114-doan.firebasestorage.app"
+    "project_number": "782177130275",
+    "project_id": "se114-e98e7",
+    "storage_bucket": "se114-e98e7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:547780850155:android:01deada8f24c3cd60ba9ae",
+        "mobilesdk_app_id": "1:782177130275:android:2c7c7be89913379216de96",
         "android_client_info": {
           "package_name": "com.example.SE114_DoAn"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCVGiUxYL78iH4-U-7-okf2uTxek09LGhw"
+          "current_key": "AIzaSyAdCya_7Lj-MBIotKILGa6ZhVHHkYr9940"
         }
       ],
       "services": {
