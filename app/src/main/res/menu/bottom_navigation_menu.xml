@@ -3,11 +3,7 @@
     <item
         android:id="@+id/nav_board"
         android:icon="@drawable/ic_board_foreground"
-        android:title="Board" />
-    <item
-        android:id="@+id/nav_notifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="Thông báo" />
+        android:title="Home" />
     <item
         android:id="@+id/nav_chat"
         android:title="Chat"
@@ -15,5 +11,5 @@
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/ic_account"
-        android:title="Tài khoản" />
+        android:title="Account" />
 </menu>
