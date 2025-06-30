@@ -26,11 +26,9 @@ import com.google.firebase.storage.StorageReference;
 public class BoardViewModel extends ViewModel {
     private static final String TAG = "BoardViewModel";
 
-    // LiveData cho màn hình Board
     private final MutableLiveData<List<Group>> groups = new MutableLiveData<>();
     private final MutableLiveData<Map<String, List<Task>>> groupTasks = new MutableLiveData<>();
 
-    // LiveData mới cho màn hình Chat Lobby
     private final MutableLiveData<List<GroupChatInfo>> groupChatInfos = new MutableLiveData<>();
 
     private final MutableLiveData<String> operationStatus = new MutableLiveData<>();
@@ -239,6 +237,25 @@ public class BoardViewModel extends ViewModel {
                 .addOnFailureListener(e -> operationStatus.setValue("Lỗi khi xóa thành viên."));
     }
 
+    public void removeUserFromGroup(String groupId, String userId) {
+        if (groupId == null || userId == null || groupId.isEmpty() || userId.isEmpty()) {
+            operationStatus.setValue("Group ID hoặc User ID không hợp lệ.");
+            return;
+        }
+        // ID của document trong collection "Member" được cấu tạo từ "userId_groupId"
+        String memberDocId = userId + "_" + groupId;
+
+        db.collection("Member").document(memberDocId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    operationStatus.setValue("Đã xóa thành viên khỏi nhóm thành công!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Lỗi khi xóa thành viên khỏi nhóm.", e);
+                    operationStatus.setValue("Lỗi khi xóa thành viên khỏi nhóm: " + e.getMessage());
+                });
+    }
+
     public void addUserToGroup(String groupId, String userEmail) {
         if (groupId == null || userEmail == null || userEmail.trim().isEmpty()) {
             operationStatus.setValue("Email hoặc Group ID không hợp lệ.");
@@ -254,7 +271,7 @@ public class BoardViewModel extends ViewModel {
                         // Lấy user_id của người dùng được tìm thấy
                         String targetUserId = queryDocumentSnapshots.getDocuments().get(0).getId();
 
-                        // Bước 2: Tạo một bản ghi mới trong collection "Member"
+                        // Tạo một bản ghi mới trong collection "Member"
                         Map<String, Object> memberData = new HashMap<>();
                         memberData.put("user_id", targetUserId);
                         memberData.put("group_id", groupId);

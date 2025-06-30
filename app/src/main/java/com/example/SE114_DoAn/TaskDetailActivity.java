@@ -319,7 +319,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                         memberListLayout.removeAllViews();
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             User user = document.toObject(User.class);
-                            memberListLayout.addView(createMemberViewForDialog(user, document.getId()));
+                            memberListLayout.addView(createMemberViewForDialog(user, document.getId(), memberDialog));
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -332,7 +332,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         memberDialog.show();
     }
 
-    private View createMemberViewForDialog(User user, String userId) {
+    private View createMemberViewForDialog(User user, String userId, final AlertDialog mainDialog) {
         LinearLayout memberLayout = new LinearLayout(this);
         memberLayout.setOrientation(LinearLayout.HORIZONTAL);
         memberLayout.setGravity(Gravity.CENTER_VERTICAL);
@@ -350,9 +350,16 @@ public class TaskDetailActivity extends AppCompatActivity {
             btnRemove.setBackground(null);
             btnRemove.setOnClickListener(v -> {
                 new AlertDialog.Builder(this)
-                        .setTitle("Xóa Thành viên")
-                        .setMessage("Bạn có chắc muốn xóa thành viên này khỏi task?")
-                        .setPositiveButton("Xóa", (dialog, which) -> viewModel.removeUserFromTask(task.getTask_id(), userId))
+                        .setTitle("Xóa thành viên")
+                        .setMessage("Bạn có chắc muốn xóa vĩnh viễn thành viên '"
+                                + (user != null ? user.getUsername() : userId)
+                                + "' khỏi nhóm? Họ sẽ không còn quyền truy cập vào bất kỳ task nào trong nhóm này nữa.")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            viewModel.removeUserFromGroup(task.getGroup_id(), userId);
+                            viewModel.removeUserFromTask(task.getTask_id(), userId);
+
+                            mainDialog.dismiss();
+                        })
                         .setNegativeButton("Hủy", null)
                         .show();
             });
