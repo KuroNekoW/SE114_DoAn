@@ -23,7 +23,7 @@
             android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -32,6 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textSize="11sp"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@color/black" />
     </LinearLayout>
 </RelativeLayout>

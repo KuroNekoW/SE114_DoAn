@@ -3,5 +3,5 @@
     android:id="@+id/rvChatLobby"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0DDDD"
+    android:background="@color/primary_dark"
     android:padding="8dp"/>

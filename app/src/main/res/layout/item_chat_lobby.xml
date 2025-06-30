@@ -47,7 +47,7 @@
                 android:text="Chưa có tin nhắn"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
         </LinearLayout>
 

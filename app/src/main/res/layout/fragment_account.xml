@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0DDDD"
+    android:background="@color/primary_dark_2"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -66,10 +66,10 @@
     <!-- Dòng phân cách -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="#E0E0E0" />
+        android:background="@color/black" />
 
     <!-- Phần Cài đặt -->
     <TextView
@@ -79,7 +79,7 @@
         android:layout_marginEnd="10dp"
         android:paddingVertical="8dp"
         android:text="Settings"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
