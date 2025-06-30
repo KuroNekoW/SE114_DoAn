@@ -3,74 +3,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@color/primary_dark"
     android:gravity="center"
     android:padding="16dp"
     tools:ignore="ExtraText">
 
+    <!-- Khung trắng chứa toàn bộ nội dung -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="24dp"
+        android:elevation="4dp"
+        android:layout_margin="32dp"
         android:gravity="center"
         tools:ignore="UselessParent">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/icon_account" />
+        <!-- Tiêu đề ĐĂNG KÝ -->
+        <TextView
+            android:id="@+id/loginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SIGN UP"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Email -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:hint="Email"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
             android:textSize="18sp"
-            android:background="@drawable/rounded_text_frame"
+            android:background="@android:drawable/edit_text"
             android:padding="10dp"
             android:inputType="textEmailAddress" />
 
+        <!-- Mật khẩu -->
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:hint="Password"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
             android:textSize="18sp"
-            android:background="@drawable/rounded_text_frame"
+            android:background="@android:drawable/edit_text"
             android:padding="10dp"
             android:inputType="textPassword" />
 
+        <!-- Xác nhận mật khẩu -->
         <EditText
             android:id="@+id/etConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:hint="Confirm Password"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
             android:textSize="18sp"
-            android:background="@drawable/rounded_text_frame"
+            android:background="@android:drawable/edit_text"
             android:padding="10dp"
             android:inputType="textPassword" />
 
+        <!-- Nút đăng ký -->
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/rounded_login_button"
-            android:backgroundTint="#B830E1E9"
-            android:padding="8dp"
-            android:text="Register"
-            android:textColor="@color/black"
+            android:background="#03A9F4"
+            android:padding="12dp"
+            android:text="REGISTER"
+            android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
+        <!-- Link quay lại -->
         <TextView
             android:id="@+id/back_to_login_text"
             android:layout_width="match_parent"
@@ -81,7 +95,7 @@
             android:focusable="true"
             android:gravity="end"
             android:text="Already have an account? Login"
-            android:textColor="@color/black"
+            android:textColor="#000000"
             android:textSize="14sp" />
 
     </LinearLayout>

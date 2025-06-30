@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#373535">
+        android:background="#9EBADB">
 
         <TextView
             android:id="@+id/etCardTitle"
@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:padding="12dp"
             android:text="Nội dung thẻ"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="16sp" />
 
         <ImageButton
@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_delete"
-            card_view:tint="@android:color/white"
+            card_view:tint="@color/red"
             android:contentDescription="Xóa Task" />
 
     </RelativeLayout>

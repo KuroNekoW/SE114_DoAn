@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECE5DD">
+    android:background="@color/primary_dark_2">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_group_chat"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_marginTop="25dp"
-        android:background="#3F51B5"
+        android:background="@color/primary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/layout_chatbox"
         android:layout_below="@id/toolbar_group_chat"
-        android:background="#D3D3D3"
+        android:background="@color/primary_dark_2"
         android:padding="8dp" />
 
     <LinearLayout
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#F0F0F0"
+        android:background="@color/primary_dark"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -51,10 +51,10 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/circle_background"
-            android:backgroundTint="#0078FF"
+            android:backgroundTint="@color/primary_light_1"
             android:elevation="4dp"
             android:src="@android:drawable/ic_menu_send"
-            android:tint="@android:color/white" />
+            android:tint="@color/white" />
     </LinearLayout>
 
 </RelativeLayout>

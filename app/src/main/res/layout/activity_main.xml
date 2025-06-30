@@ -22,9 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/accent"
+        android:background="@color/primary_dark"
         android:minHeight="60dp"
-        app:backgroundTint="#22E4D5"
+        app:backgroundTint="@color/transparent"
         app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout>

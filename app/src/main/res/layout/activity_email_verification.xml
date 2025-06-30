@@ -3,51 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@color/primary_dark"
     android:gravity="center"
     android:padding="16dp"
     tools:ignore="ExtraText">
 
+    <!-- Khung trắng chứa nội dung -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="24dp"
+        android:elevation="4dp"
+        android:layout_margin="32dp"
         android:gravity="center"
         tools:ignore="UselessParent">
-        <ImageView
-            android:layout_width="122dp"
-            android:layout_height="107dp"
-            android:src="@drawable/icon_account" />
 
+        <!-- Icon avatar -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/icon_account"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Tiêu đề thông báo -->
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="Email chưa được xác nhận!"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp" />
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Nút resend -->
         <Button
             android:id="@+id/resendCodeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Resent Code"
-            android:textSize="18sp"/>
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="#03A9F4"
+            android:text="RESEND CODE"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:padding="10dp" />
 
+        <!-- Nút quay lại -->
         <TextView
             android:id="@+id/toLoginText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="12dp"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:text="Go Back"
-            android:textColor="@color/design_default_color_on_secondary"
-            android:textSize="14sp"/>
-
+            android:text="← Go back to login"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="italic" />
     </LinearLayout>
+
 </RelativeLayout>

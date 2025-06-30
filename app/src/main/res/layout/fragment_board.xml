@@ -6,4 +6,4 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:clipToPadding="false"
-    android:background="#E0DDDD" />
+    android:background="@color/primary_dark" />
