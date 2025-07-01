@@ -44,7 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     /**
      * Được gọi khi FCM cấp một token mới hoặc token được làm mới.
-     * Bạn phải lưu token này vào server để có thể gửi thông báo đến thiết bị này.
+     * Lưu token này vào server để có thể gửi thông báo đến thiết bị.
      */
     @Override
     public void onNewToken(@NonNull String token) {
