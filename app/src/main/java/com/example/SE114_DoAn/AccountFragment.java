@@ -1,5 +1,6 @@
 package com.example.SE114_DoAn;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -123,9 +124,11 @@ public class AccountFragment extends Fragment {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    Intent image=result.getData();
-                    Uri imageUri = image.getData();
-                    uploadImagetoFirebase(imageUri);
+                    if (result.getResultCode() == Activity.RESULT_OK){
+                        Intent image=result.getData();
+                        Uri imageUri = image.getData();
+                        uploadImagetoFirebase(imageUri);
+                    }
                 }
             });
 
